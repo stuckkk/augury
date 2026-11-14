@@ -127,38 +127,65 @@
   color: #a8d8ff;
 }
 
-/* Trump medallion */
+/* Trump medallion: an upright badge tinted with the trump suit's colour so it can't be overlooked. */
 .trump {
   position: absolute;
   left: 16px;
   top: 14px;
+  width: 104px;
   display: flex;
-  gap: 10px;
+  flex-direction: column;
   align-items: center;
+  gap: 6px;
   z-index: 3;
-  padding: 6px 12px 6px 6px;
-  border-radius: 14px;
-  background: rgba(8, 12, 32, 0.7);
-  border: 1px solid var(--line);
+  padding: 8px 6px 9px;
+  border-radius: 18px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--trump-accent) 22%, transparent), transparent 70%),
+    rgba(8, 12, 32, 0.86);
+  border: 1.5px solid color-mix(in srgb, var(--trump-accent) 70%, transparent);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--trump-accent) 12%, transparent),
+    0 0 32px color-mix(in srgb, var(--trump-accent) 30%, transparent),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+  animation: trumpAnnounce 1.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
 }
 
+@keyframes trumpAnnounce {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  35% {
+    transform: scale(1.08);
+    opacity: 1;
+    box-shadow:
+      0 0 0 10px color-mix(in srgb, var(--trump-accent) 25%, transparent),
+      0 0 60px color-mix(in srgb, var(--trump-accent) 60%, transparent);
+  }
+}
+
+/* Phones: on the orrery's left rim (top is set inline), clear of the bid dial and hand. */
 .trumpCompact {
   left: 6px;
-  top: auto;
-  bottom: 96px;
-  padding: 4px 8px 4px 4px;
-  gap: 6px;
+  translate: 0 -50%;
+  width: 76px;
+  padding: 6px 4px 7px;
+  gap: 5px;
+  border-radius: 14px;
 }
 
 .trumpCard {
-  width: 40px;
-  height: 60px;
+  width: 60px;
+  height: 90px;
   flex: none;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--trump-accent) 55%, transparent));
 }
 
 .trumpCompact .trumpCard {
-  width: 28px;
-  height: 42px;
+  width: 38px;
+  height: 57px;
 }
 
 .noCard {
@@ -173,29 +200,35 @@
 
 .trumpText {
   display: grid;
-  gap: 1px;
+  justify-items: center;
+  gap: 2px;
 }
 
 .trumpTitle {
-  font-size: 0.62rem;
+  font-size: 0.64rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  color: var(--text-faint);
+  color: color-mix(in srgb, var(--trump-accent) 75%, var(--text-dim));
+}
+
+.trumpCompact .trumpTitle {
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
 }
 
 .trumpSuit {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 2px;
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: var(--trump-accent);
 }
 
 .trumpCompact .trumpSuit {
-  font-size: 0.85rem;
-}
-
-.round {
-  font-size: 0.72rem;
-  color: var(--text-dim);
+  font-size: 0.92rem;
+  gap: 1px;
 }

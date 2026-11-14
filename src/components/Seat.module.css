@@ -187,34 +187,66 @@
 /* Blind round: the other players' cards, held up for everyone but their owner to see. */
 .revealed {
   position: absolute;
-  left: calc(100% + 8px);
+  left: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%);
   display: flex;
-  gap: 4px;
-  animation: reveal 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  gap: 6px;
+  animation: reveal 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+.revealLeft {
+  left: auto;
+  right: calc(100% + 12px);
 }
 
 .compact .revealed {
   left: 50%;
-  top: calc(100% + 4px);
+  right: auto;
+  top: calc(100% + 6px);
   transform: translateX(-50%);
 }
 
 .revealedCard {
-  width: 46px;
-  height: 69px;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+  width: 72px;
+  height: 108px;
+  border-radius: 7px;
+  box-shadow:
+    0 0 0 2px var(--seat),
+    0 0 22px color-mix(in srgb, var(--seat) 65%, transparent),
+    0 8px 18px rgba(0, 0, 0, 0.55);
+  animation: glint 2.6s ease-in-out 0.6s infinite;
 }
 
 .compact .revealedCard {
-  width: 32px;
-  height: 48px;
+  width: 44px;
+  height: 66px;
+  border-radius: 4px;
 }
 
 @keyframes reveal {
   from {
-    transform: rotateY(90deg);
+    transform: translateY(-50%) rotateY(90deg) scale(0.6);
     opacity: 0;
+  }
+}
+
+.compact .revealed {
+  animation-name: revealCompact;
+}
+
+@keyframes revealCompact {
+  from {
+    transform: translateX(-50%) rotateY(90deg) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes glint {
+  50% {
+    box-shadow:
+      0 0 0 2px var(--seat),
+      0 0 34px color-mix(in srgb, var(--seat) 90%, transparent),
+      0 8px 18px rgba(0, 0, 0, 0.55);
   }
 }
