@@ -1,0 +1,92 @@
+.orbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 16px;
+  max-width: 150px;
+}
+
+.orb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.small .orb {
+  width: 9px;
+  height: 9px;
+}
+
+.open {
+  border: 1.5px solid rgba(233, 196, 106, 0.55);
+  background: rgba(233, 196, 106, 0.05);
+}
+
+.won {
+  background: radial-gradient(circle at 35% 35%, #fff4c7, var(--gold) 55%, #b48a2c);
+  box-shadow: 0 0 8px rgba(233, 196, 106, 0.7);
+  animation: fill 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.over {
+  background:
+    linear-gradient(135deg, transparent 45%, #2b0b14 46%, #2b0b14 54%, transparent 55%),
+    radial-gradient(circle at 35% 35%, #ffc2c2, var(--bad) 60%, #a33);
+  box-shadow: 0 0 8px rgba(255, 123, 123, 0.6);
+  animation: fill 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@keyframes fill {
+  from {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+}
+
+.halo {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(233, 196, 106, 0.7);
+  animation: spin 8s linear infinite;
+}
+
+.halo.broken {
+  border-color: var(--bad);
+  border-style: dotted;
+  opacity: 0.6;
+  animation: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.check {
+  color: var(--good);
+  font-size: 0.8rem;
+  margin-left: 2px;
+}
+
+.pending {
+  color: var(--text-faint);
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+}
+
+.seal {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #8a2338, #4d0f1e);
+  color: #ffcfd8;
+  font-size: 0.6rem;
+  box-shadow: 0 0 6px rgba(255, 102, 128, 0.5);
+}

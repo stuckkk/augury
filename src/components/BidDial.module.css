@@ -1,0 +1,131 @@
+.wrap {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 10px 12px 8px;
+  border-radius: 24px 24px 18px 18px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(42, 56, 116, 0.75), rgba(8, 12, 32, 0.9) 70%);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 0 40px rgba(233, 196, 106, 0.12), var(--shadow);
+  backdrop-filter: blur(8px);
+  animation: rise 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}
+
+.dial {
+  position: relative;
+}
+
+.arc {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.arc path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-opacity: 0.25;
+  stroke-dasharray: 1 4;
+}
+
+.value {
+  position: absolute;
+  width: var(--btn);
+  height: var(--btn);
+  margin: calc(var(--btn) / -2) 0 0 calc(var(--btn) / -2);
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: radial-gradient(circle at 35% 30%, #2a3874, #0d1433);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text);
+  transition:
+    transform 0.15s,
+    background 0.15s;
+  animation: pop 0.3s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+.value:hover:not(:disabled) {
+  transform: scale(1.12);
+  border-color: var(--gold);
+}
+
+.picked {
+  background: radial-gradient(circle at 35% 30%, #fff1c2, var(--gold) 60%, #a07a28);
+  color: #1a1408;
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 18px rgba(255, 224, 143, 0.7);
+  transform: scale(1.12);
+}
+
+.forbidden {
+  opacity: 0.35;
+  text-decoration: line-through;
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.center {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+
+.prompt {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+}
+
+.big {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--gold-bright);
+}
+
+.gauge {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.over {
+  color: #ffb3a1;
+}
+
+.under {
+  color: #a8d8ff;
+}
+
+.even {
+  color: var(--gold-bright);
+}
+
+.pending {
+  color: var(--text-faint);
+}
+
+.rule {
+  color: var(--text-faint);
+  font-style: italic;
+}

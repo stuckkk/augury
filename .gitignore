@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-server
+*.log
+.env
+.env.local
+.vscode
+.idea
+snapshots/

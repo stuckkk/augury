@@ -1,0 +1,201 @@
+.table {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.orrery {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.rays {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ray {
+  stroke-width: 1.5;
+  stroke-opacity: 0.55;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+  animation: ray-flow 1.2s linear infinite, ray-in 0.4s ease-out;
+}
+
+@keyframes ray-flow {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+
+@keyframes ray-in {
+  from {
+    stroke-opacity: 0;
+  }
+}
+
+/* The trick: cards fly in from their player's side, then streak like a comet to the winner. */
+.trick {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 2;
+}
+
+.trickCard {
+  position: absolute;
+  width: var(--card-w);
+  height: calc(var(--card-w) * 1.5);
+  left: calc(var(--card-w) * -0.5);
+  top: calc(var(--card-w) * -0.75);
+  transform: translate(var(--to-x), var(--to-y)) rotate(var(--rot));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55));
+  animation: fly 0.45s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+
+@keyframes fly {
+  from {
+    transform: translate(var(--from-x), var(--from-y)) rotate(0deg) scale(0.7);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+.resolved {
+  animation:
+    fly 0.45s cubic-bezier(0.2, 0.9, 0.25, 1) both,
+    comet 0.55s cubic-bezier(0.5, 0, 0.75, 0) 0.95s forwards;
+}
+
+.winner {
+  z-index: 20 !important;
+}
+
+.winner::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px var(--gold-bright),
+    0 0 30px 6px rgba(255, 224, 143, 0.65);
+  opacity: 0;
+  animation: flare 0.6s ease-out 0.35s forwards;
+}
+
+@keyframes flare {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes comet {
+  to {
+    transform: translate(var(--win-x), var(--win-y)) rotate(0deg) scale(0.25);
+    opacity: 0;
+    filter: blur(2px) drop-shadow(0 0 16px var(--gold-bright));
+  }
+}
+
+.status {
+  position: absolute;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 92%;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pressure {
+  white-space: nowrap;
+  color: var(--text-faint);
+}
+
+.over {
+  color: #ffb3a1;
+}
+
+.under {
+  color: #a8d8ff;
+}
+
+/* Trump medallion */
+.trump {
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 3;
+  padding: 6px 12px 6px 6px;
+  border-radius: 14px;
+  background: rgba(8, 12, 32, 0.7);
+  border: 1px solid var(--line);
+}
+
+.trumpCompact {
+  left: 6px;
+  top: auto;
+  bottom: 96px;
+  padding: 4px 8px 4px 4px;
+  gap: 6px;
+}
+
+.trumpCard {
+  width: 40px;
+  height: 60px;
+  flex: none;
+}
+
+.trumpCompact .trumpCard {
+  width: 28px;
+  height: 42px;
+}
+
+.noCard {
+  width: 100%;
+  height: 100%;
+  border: 1px dashed var(--line-strong);
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+}
+
+.trumpText {
+  display: grid;
+  gap: 1px;
+}
+
+.trumpTitle {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-faint);
+}
+
+.trumpSuit {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+
+.trumpCompact .trumpSuit {
+  font-size: 0.85rem;
+}
+
+.round {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}

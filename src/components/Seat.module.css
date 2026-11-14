@@ -1,0 +1,220 @@
+.seat {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  z-index: 3;
+  pointer-events: auto;
+  transition:
+    left 0.4s,
+    top 0.4s;
+}
+
+.plate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px 5px 5px;
+  border-radius: 999px;
+  background: rgba(8, 12, 32, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.acting .plate {
+  border-color: var(--seat);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--seat) 25%, transparent),
+    0 0 28px color-mix(in srgb, var(--seat) 45%, transparent);
+  animation: breathe 2.2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  50% {
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, var(--seat) 18%, transparent),
+      0 0 36px color-mix(in srgb, var(--seat) 55%, transparent);
+  }
+}
+
+.sigil {
+  position: relative;
+  display: grid;
+}
+
+.dealer {
+  position: absolute;
+  right: -5px;
+  bottom: -4px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: #1a1408;
+  background: var(--gold);
+  box-shadow: 0 0 0 2px var(--ink-1);
+}
+
+.text {
+  display: grid;
+  line-height: 1.15;
+  min-width: 0;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.you {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.score {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--gold);
+}
+
+.unit {
+  color: var(--text-faint);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+}
+
+.status {
+  display: flex;
+  gap: 4px;
+  min-height: 14px;
+  align-items: center;
+}
+
+.status > span {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.offline {
+  color: var(--bad);
+}
+
+.bot {
+  color: var(--text-faint);
+}
+
+.ready {
+  color: var(--good);
+}
+
+.thinking {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.thinking i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--seat);
+  animation: dot 1.2s ease-in-out infinite;
+}
+
+.thinking i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.thinking i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes dot {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.replace {
+  font-size: 0.72rem;
+}
+
+/* Phone strip */
+.compact .plate {
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px 6px;
+  border-radius: 14px;
+}
+
+.compact .text {
+  justify-items: center;
+}
+
+.compact .name {
+  font-size: 0.72rem;
+  max-width: 64px;
+}
+
+.compact .score {
+  font-size: 0.72rem;
+}
+
+.compact .orbs,
+.compact > div:nth-child(2) {
+  max-width: 76px;
+}
+
+/* Blind round: the other players' cards, held up for everyone but their owner to see. */
+.revealed {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 4px;
+  animation: reveal 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+.compact .revealed {
+  left: 50%;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+}
+
+.revealedCard {
+  width: 46px;
+  height: 69px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+
+.compact .revealedCard {
+  width: 32px;
+  height: 48px;
+}
+
+@keyframes reveal {
+  from {
+    transform: rotateY(90deg);
+    opacity: 0;
+  }
+}

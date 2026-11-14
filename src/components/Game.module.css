@@ -1,0 +1,179 @@
+.game {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(233, 196, 106, 0.1);
+  background: linear-gradient(180deg, rgba(5, 8, 22, 0.8), rgba(5, 8, 22, 0.3));
+  position: relative;
+  z-index: 5;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.35rem;
+  color: var(--gold);
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--text-faint);
+}
+
+.roundPill {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.roundPill span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+}
+
+.roundPill .past {
+  background: var(--gold-dim);
+  border-color: var(--gold-dim);
+}
+
+.roundPill .now {
+  background: var(--gold-bright);
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 8px var(--gold);
+  transform: scale(1.3);
+}
+
+.roundPill b {
+  margin-left: 8px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.tableArea {
+  position: relative;
+  min-height: 0;
+}
+
+.centerOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.centerOverlay > * {
+  pointer-events: auto;
+}
+
+.dialOverlay {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  transform: translateX(-50%);
+  z-index: 20;
+  max-width: calc(100% - 12px);
+}
+
+.handArea {
+  position: relative;
+  padding: 0 8px max(8px, env(safe-area-inset-bottom));
+  background: radial-gradient(ellipse 60% 100% at 50% 100%, rgba(42, 56, 116, 0.45), transparent 70%);
+  transition: background 0.4s;
+}
+
+.yourTurn {
+  background: radial-gradient(ellipse 60% 100% at 50% 100%, rgba(233, 196, 106, 0.2), transparent 70%);
+}
+
+.blindNote {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  max-width: 30%;
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--gold-bright);
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.compact .blindNote {
+  max-width: 28%;
+  font-size: 0.75rem;
+}
+
+.compact .label {
+  display: none;
+}
+
+.leaveText {
+  color: var(--text-dim);
+  margin: 0 0 16px;
+}
+
+.leaveActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Phones */
+.compact .bar {
+  padding: 6px 8px;
+  gap: 6px;
+}
+
+.compact .brand .code,
+.compact .roundPill span {
+  display: none;
+}
+
+.compact .logo {
+  font-size: 1.05rem;
+}
+
+.compact .roundPill b {
+  margin: 0;
+}
+
+.compact .actions :global(.btn-small) {
+  padding: 0.3em 0.5em;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .roundPill span {
+    display: none;
+  }
+}

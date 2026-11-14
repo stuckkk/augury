@@ -1,0 +1,217 @@
+.scores {
+  display: grid;
+  gap: 12px;
+}
+
+.tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  justify-self: start;
+}
+
+.tab,
+.tabOn {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.35em 1em;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.tabOn {
+  background: var(--gold);
+  color: #1a1408;
+  font-weight: 600;
+}
+
+.chart {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 0.85rem;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-dim);
+}
+
+.legend b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.legendMe {
+  color: var(--text) !important;
+}
+
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.plot {
+  position: relative;
+}
+
+.plot svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: pan-y;
+}
+
+.grid {
+  stroke: rgba(255, 255, 255, 0.06);
+}
+
+.zero {
+  stroke: rgba(255, 255, 255, 0.22);
+}
+
+.axis {
+  fill: var(--text-faint);
+  font-size: 11px;
+  font-family: var(--font-mono);
+}
+
+.crosshair {
+  stroke: var(--gold);
+  stroke-opacity: 0.4;
+  stroke-dasharray: 3 3;
+}
+
+.tooltip {
+  position: absolute;
+  top: 8px;
+  transform: translateX(-50%);
+  min-width: 150px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(5, 8, 22, 0.94);
+  border: 1px solid var(--line-strong);
+  font-size: 0.78rem;
+  display: grid;
+  gap: 3px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tooltip span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-dim);
+}
+
+.tooltip i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.tooltip b {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.tooltip em,
+.detail em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  min-width: 3.4ch;
+  text-align: right;
+}
+
+.plus {
+  color: var(--good);
+}
+
+.minus {
+  color: var(--bad);
+}
+
+.empty {
+  color: var(--text-faint);
+  font-style: italic;
+  text-align: center;
+}
+
+.ledgerWrap {
+  overflow: auto;
+  max-height: 60vh;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.ledger {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.ledger th,
+.ledger td {
+  padding: 6px 10px;
+  text-align: right;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  white-space: nowrap;
+}
+
+.ledger thead th {
+  position: sticky;
+  top: 0;
+  background: var(--ink-2);
+  font-weight: 600;
+  text-align: center;
+}
+
+.ledger thead .swatch {
+  margin-right: 6px;
+}
+
+.ledger tbody th {
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-weight: 400;
+  text-align: center;
+}
+
+.total {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+
+.detail {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+
+.colMe {
+  background: rgba(233, 196, 106, 0.05);
+}

@@ -1,0 +1,30 @@
+.rules {
+  display: grid;
+  gap: 14px;
+  line-height: 1.55;
+  font-size: 0.93rem;
+}
+
+.rules h3 {
+  font-size: 1.05rem;
+  color: var(--gold-bright);
+  margin-bottom: 2px;
+}
+
+.rules p {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.suits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.suits span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-display);
+}
