@@ -17,12 +17,14 @@ export interface SeatProps {
   compact: boolean
   /** Cards of this player you can see (the blind round shows everyone else's card). */
   revealed: Card[] | null
+  /** Which side of the plate those cards sit on: outward, away from the table's centre. */
+  revealSide: 'left' | 'right'
   /** Host may give this (disconnected) seat to a bot. */
   onReplace?: () => void
   style: React.CSSProperties
 }
 
-export function Seat({ info, player, color, me, dealer, acting, ready, compact, revealed, onReplace, style }: SeatProps) {
+export function Seat({ info, player, color, me, dealer, acting, ready, compact, revealed, revealSide, onReplace, style }: SeatProps) {
   const { t } = useTranslation()
   const cls = [styles.seat, acting && styles.acting, me && styles.me, compact && styles.compact].filter(Boolean).join(' ')
   return (
@@ -48,7 +50,7 @@ export function Seat({ info, player, color, me, dealer, acting, ready, compact, 
         </span>
       </div>
       {revealed && revealed.length > 0 && (
-        <div className={styles.revealed}>
+        <div className={`${styles.revealed} ${revealSide === 'left' ? styles.revealLeft : ''}`}>
           {revealed.map(c => (
             <span key={c.id} className={styles.revealedCard}>
               <CardFace card={c} />

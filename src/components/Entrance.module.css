@@ -5,6 +5,7 @@
   align-items: center;
   padding: 16px 16px 24px;
   gap: 8px;
+  overflow-x: clip;
 }
 
 .top {
@@ -71,7 +72,10 @@
   font-weight: 400;
   font-style: italic;
   letter-spacing: 0.02em;
-  line-height: 1;
+  line-height: 1.15;
+  /* Room for the italic descenders (g, y): background-clip: text only paints inside the box. */
+  padding: 0 0.12em 0.14em;
+  margin-bottom: -0.1em;
   background: linear-gradient(180deg, #fff6d8, var(--gold) 60%, var(--gold-dim));
   background-clip: text;
   -webkit-background-clip: text;
@@ -100,11 +104,13 @@
   backdrop-filter: blur(8px);
   box-shadow: var(--shadow);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
 }
 
 .field {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
   font-size: 0.85rem;
   color: var(--text-dim);
@@ -112,6 +118,8 @@
 
 .field input,
 .code {
+  width: 100%;
+  min-width: 0;
   padding: 0.75em 1em;
   border-radius: 12px;
   border: 1px solid var(--line);
@@ -128,6 +136,7 @@
 
 .actions {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
 }
 
@@ -140,6 +149,11 @@
 .join {
   display: flex;
   gap: 8px;
+  min-width: 0;
+}
+
+.join > :global(.btn) {
+  flex: none;
 }
 
 .code {

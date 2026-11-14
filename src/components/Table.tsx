@@ -93,7 +93,13 @@ export function Table({
             )}
           </svg>
 
-          <Trump view={view} compact={compact} />
+          {/* Keyed so the announce animation replays whenever a new trump is set. */}
+          <Trump
+            key={`${view.round}-${view.trump ?? view.phase}`}
+            view={view}
+            compact={compact}
+            top={compact ? center.y : undefined}
+          />
 
           <div className={styles.trick} style={{ left: center.x, top: center.y, '--card-w': `${cardW}px` } as React.CSSProperties}>
             {plays.map((p, i) => {
@@ -144,6 +150,7 @@ export function Table({
                 ready={view.phase === 'roundEnd' ? view.ready[i] : null}
                 compact={compact}
                 revealed={i === view.seat ? null : p.hand}
+                revealSide={pos[i].x < center.x - 1 ? 'left' : 'right'}
                 onReplace={isHost && !info.connected && !info.isBot ? () => onReplace(info.id) : undefined}
                 style={{ left: pos[i].x, top: pos[i].y }}
               />
@@ -156,21 +163,24 @@ export function Table({
   )
 }
 
-function Trump({ view, compact }: { view: GameView; compact: boolean }) {
+function Trump({ view, compact, top }: { view: GameView; compact: boolean; top?: number }) {
   const { t } = useTranslation()
   const label = view.trump ? t(`suits.${view.trump}`) : view.phase === 'chooseTrump' ? t('trump.choosing') : t('trump.none')
   return (
-    <div className={`${styles.trump} ${compact ? styles.trumpCompact : ''}`} aria-label={`${t('trump.title')}: ${label}`}>
+    <div
+      className={`${styles.trump} ${compact ? styles.trumpCompact : ''}`}
+      style={{ '--trump-accent': view.trump ? `var(--${view.trump})` : 'var(--gold)', top } as React.CSSProperties}
+      aria-label={`${t('trump.title')}: ${label}`}
+    >
       <div className={styles.trumpCard}>
         {view.trumpCard ? <CardFace card={view.trumpCard} /> : <div className={styles.noCard}>∅</div>}
       </div>
       <div className={styles.trumpText}>
         <span className={styles.trumpTitle}>{t('trump.title')}</span>
         <span className={styles.trumpSuit}>
-          {view.trump && <SuitIcon suit={view.trump} size={16} />}
+          {view.trump && <SuitIcon suit={view.trump} size={compact ? 16 : 20} />}
           {label}
         </span>
-        <span className={styles.round}>{t('game.roundOf', { round: view.round, total: view.totalRounds })}</span>
       </div>
     </div>
   )
