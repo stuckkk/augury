@@ -13,6 +13,7 @@
     "createInstead": "oder stattdessen einen neuen Tisch eröffnen",
     "code": "Tisch-Code",
     "join": "Beitreten",
+    "inviteTitle": "Tisch {{code}} beitreten",
     "footer": "Lade Freunde mit dem Tisch-Code oder Link ein. Bots füllen freie Plätze."
   },
   "lobby": {
@@ -102,17 +103,13 @@
   },
   "status": {
     "choosingTrump": "{{name}} wählt Trumpf…",
-    "bidding": "{{name}} prophezeit…",
     "sealedBids": "Versiegelte Ansagen: {{done}} von {{total}}",
-    "playing": "{{name}} ist am Zug.",
     "tookTrick": "{{name}} bekommt den Stich.",
-    "pressure": "Ansagen {{sum}} / Stiche {{round}}",
-    "pressureHint": "Alle Ansagen zusammen, gegenüber den Stichen dieser Runde",
+    "pressure": "Ansagen {{sum}} / {{round}}",
+    "pressureHint": "Alle Ansagen zusammen, gegenüber den Stichen dieser Runde. +: mehr Ansagen als Stiche, −: weniger",
     "over": "{{n}} zu viel",
     "under": "{{n}} zu wenig",
     "choosingTrumpYou": "Du wählst Trumpf…",
-    "biddingYou": "Deine Prophezeiung…",
-    "playingYou": "Du bist am Zug.",
     "tookTrickYou": "Du bekommst den Stich."
   },
   "seat": {
@@ -189,6 +186,8 @@
     "vibrate": "Vibration",
     "vibrateDesc": "Auf dem Handy, wenn du dran bist",
     "confirmPlay": "Zweimal tippen zum Ausspielen",
+    "statusLine": "Tischstatus",
+    "statusLineDesc": "Über deinem Platz: wer den Stich bekommt, und alle Ansagen gegenüber den Stichen",
     "confirmPlayDesc": "Erstes Tippen hebt die Karte an, zweites spielt sie aus"
   },
   "errors": {

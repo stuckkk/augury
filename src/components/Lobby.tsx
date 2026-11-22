@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MAX_PLAYERS, MIN_PLAYERS, maxRounds } from '../engine/cards'
 import type { RuleOptions } from '../engine/types'
@@ -27,13 +27,32 @@ export function Lobby({ session }: { session: Session }) {
   const link = inviteLink(room.id, session.lanHost)
   const count = room.seats.length
 
+  const linkRef = useRef<HTMLInputElement>(null)
+
   const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(link)
+    let ok = false
+    // The async clipboard API only exists in secure contexts (https or localhost).
+    if (window.isSecureContext && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(link)
+        ok = true
+      } catch {
+        // Fall through to the selection-based copy.
+      }
+    }
+    if (!ok && linkRef.current) {
+      // Plain http on a LAN: copy the selected text the old way.
+      linkRef.current.focus()
+      linkRef.current.select()
+      try {
+        ok = document.execCommand('copy')
+      } catch {
+        // The link stays selected for copying by hand.
+      }
+    }
+    if (ok) {
       setCopied(true)
       setTimeout(() => setCopied(false), 1800)
-    } catch {
-      // Clipboard blocked (e.g. plain http on a LAN): the link is shown for copying by hand.
     }
   }
 
@@ -61,7 +80,7 @@ export function Lobby({ session }: { session: Session }) {
               ))}
             </span>
             <div className={styles.invite}>
-              <input readOnly value={link} onFocus={e => e.target.select()} aria-label={t('lobby.inviteLink')} />
+              <input ref={linkRef} readOnly value={link} onFocus={e => e.target.select()} aria-label={t('lobby.inviteLink')} />
               <button type="button" className="btn btn-small" onClick={copy}>
                 {copied ? t('lobby.copied') : t('lobby.copy')}
               </button>

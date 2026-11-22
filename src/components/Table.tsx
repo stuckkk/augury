@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { GameView, Play } from '../engine/types'
 import type { RoomInfo } from '../network/protocol'
+import { useSettings } from '../settings/clientSettings'
 import { CardFace } from './CardFace'
 import { actingSeats, bidTally } from './gameUtil'
 import { SuitIcon } from './Glyphs'
@@ -14,8 +15,11 @@ interface Point {
   y: number
 }
 
-/** Where each seat sits: you at the bottom, the others clockwise around an ellipse (or in a strip on phones). */
-function seatPositions(n: number, me: number, w: number, h: number, compact: boolean): Point[] {
+/**
+ * Where each seat sits: you at the bottom, the others clockwise around an ellipse centred on the
+ * orrery at height `cy` (or in a strip on phones).
+ */
+function seatPositions(n: number, me: number, w: number, h: number, cy: number, compact: boolean): Point[] {
   return Array.from({ length: n }, (_, seat) => {
     const k = (seat - me + n) % n
     if (compact) {
@@ -27,8 +31,30 @@ function seatPositions(n: number, me: number, w: number, h: number, compact: boo
     const ry = h * 0.41
     const rx = Math.min(w * 0.42, ry * 1.5)
     const a = (k / n) * Math.PI * 2
-    return { x: w / 2 - Math.sin(a) * rx, y: h / 2 + Math.cos(a) * ry }
+    const x = w / 2 - Math.sin(a) * rx
+    const up = Math.cos(a) < 0
+    // Your own seat sits at the bottom, under the ring (see orreryLayout); seats above the centre stay on screen.
+    const y = k === 0 ? h - SEAT_HALF.h - 4 : cy + Math.cos(a) * (up ? Math.min(ry, cy - SEAT_HALF.h - 4) : ry)
+    // On narrow, tall tables (tablets upright) the upper left seat would sit on the trump medallion.
+    if (x - SEAT_HALF.w < TRUMP_ZONE.right && y - SEAT_HALF.h < TRUMP_ZONE.bottom) return { x, y: TRUMP_ZONE.bottom + SEAT_HALF.h }
+    return { x, y }
   })
+}
+
+/** The trump medallion in the top left corner (`.trump` in Table.module.css, two-line label), with a margin. */
+const TRUMP_ZONE = { right: 16 + 104 + 8, bottom: 14 + 178 + 8 }
+/** Half the size of a seat (name pill, orbs and label); seats are centred on their position. */
+const SEAT_HALF = { w: 52, h: 46 }
+/** Room under the orrery for your own seat and the status pill above it. */
+const OWN_SEAT_ROOM = 2 * SEAT_HALF.h + 4 + 38
+
+/**
+ * Size and centre height of the orrery on larger screens: centred while there is room, otherwise
+ * moved up (and if need be made smaller) so its ring ends above your seat and status pill.
+ */
+function orreryLayout(w: number, h: number): { size: number; cy: number } {
+  const size = Math.max(0, Math.min(w * 0.9, h * 0.74, h - OWN_SEAT_ROOM - 8))
+  return { size, cy: Math.max(size / 2 + 8, Math.min(h / 2, h - OWN_SEAT_ROOM - size / 2)) }
 }
 
 export function Table({
@@ -48,11 +74,12 @@ export function Table({
 }) {
   const [ref, { width: w, height: h }] = useElementSize<HTMLDivElement>()
   const n = view.players.length
-  const pos = seatPositions(n, view.seat, w, h, compact)
-  const center = { x: w / 2, y: compact ? h / 2 + 4 : h / 2 }
+  const wide = orreryLayout(w, h)
+  const orrerySize = compact ? Math.min(w * 0.94, h * 0.62) : wide.size
+  const center = { x: w / 2, y: compact ? h / 2 + 4 : wide.cy }
+  const pos = seatPositions(n, view.seat, w, h, center.y, compact)
   const acting = actingSeats(view)
   const cardW = Math.round(Math.max(52, Math.min(92, Math.min(w, h) * 0.15)))
-  const orrerySize = compact ? Math.min(w * 0.94, h * 0.62) : Math.min(w * 0.9, h * 0.74)
 
   // While a finished trick is still on the table, show it until someone leads the next one.
   const resolved = view.trick.length === 0 && view.lastTrick ? view.lastTrick : null
@@ -66,6 +93,9 @@ export function Table({
   }
 
   const tally = bidTally(view)
+  const { statusLine } = useSettings()
+  // Your own bid dial covers this spot while you bid.
+  const showStatus = statusLine && !(view.phase === 'bidding' && acting.includes(view.seat))
   const accent = view.trump ? `var(--${view.trump})` : undefined
 
   return (
@@ -129,11 +159,6 @@ export function Table({
             })}
           </div>
 
-          {!(view.phase === 'bidding' && acting.includes(view.seat)) && (
-            <div className={styles.status} style={{ left: center.x, top: center.y + cardW * 1.5 * 0.5 + cardW * 0.8 + 8 }}>
-              <StatusLine view={view} names={room.seats.map(s => s.name)} tally={tally} />
-            </div>
-          )}
 
           {view.players.map((p, i) => {
             const info = room.seats[i]
@@ -152,6 +177,7 @@ export function Table({
                 revealed={i === view.seat ? null : p.hand}
                 revealSide={pos[i].x < center.x - 1 ? 'left' : 'right'}
                 onReplace={isHost && !info.connected && !info.isBot ? () => onReplace(info.id) : undefined}
+                note={i === view.seat && showStatus ? <StatusLine view={view} names={room.seats.map(s => s.name)} tally={tally} /> : null}
                 style={{ left: pos[i].x, top: pos[i].y }}
               />
             )
@@ -186,37 +212,41 @@ function Trump({ view, compact, top }: { view: GameView; compact: boolean; top?:
   )
 }
 
+/**
+ * A small pill above your seat: what the seats and cards don't already show (who took the last
+ * trick, all bids against the tricks of the round). Whose turn it is shows on the seats themselves.
+ */
 function StatusLine({ view, names, tally }: { view: GameView; names: string[]; tally: { sum: number; unknown: number } }) {
   const { t } = useTranslation()
   // Separate wording for yourself ("You choose…"), since the verb form differs.
   const say = (key: string, seat: number) => (seat === view.seat ? t(`status.${key}You`) : t(`status.${key}`, { name: names[seat] ?? '?' }))
+  let content: React.ReactNode = null
   switch (view.phase) {
     case 'chooseTrump':
-      return <span>{say('choosingTrump', view.dealer)}</span>
-    case 'bidding': {
-      if (view.options.hiddenBids) {
-        const done = view.players.filter(p => p.hasBid).length
-        return <span>{t('status.sealedBids', { done, total: view.players.length })}</span>
-      }
-      return (
-        <span>
-          {say('bidding', view.turn)} <Pressure sum={tally.sum} round={view.round} partial />
-        </span>
+      content = say('choosingTrump', view.dealer)
+      break
+    case 'bidding':
+      content = view.options.hiddenBids ? (
+        t('status.sealedBids', { done: view.players.filter(p => p.hasBid).length, total: view.players.length })
+      ) : (
+        <Pressure sum={tally.sum} round={view.round} partial />
       )
-    }
+      break
     case 'playing': {
       const resolved = view.trick.length === 0 && view.lastTrick
-      return (
-        <span>
-          {resolved ? say('tookTrick', view.lastTrick!.winner) : say('playing', view.turn)}{' '}
+      content = (
+        <>
+          {resolved && <>{say('tookTrick', view.lastTrick!.winner)} · </>}
           <Pressure sum={tally.sum} round={view.round} />
-        </span>
+        </>
       )
+      break
     }
     case 'roundEnd':
     case 'gameOver':
-      return view.lastTrick ? <span>{say('tookTrick', view.lastTrick.winner)}</span> : null
+      content = view.lastTrick ? say('tookTrick', view.lastTrick.winner) : null
   }
+  return content ? <div className={styles.status}>{content}</div> : null
 }
 
 /** Bids against tricks available: is the table over- or under-prophesied? */
@@ -227,7 +257,7 @@ function Pressure({ sum, round, partial = false }: { sum: number; round: number;
   return (
     <span className={cls} title={t('status.pressureHint')}>
       {t('status.pressure', { sum, round })}
-      {!partial && diff !== 0 && <> · {diff > 0 ? t('status.over', { n: diff }) : t('status.under', { n: -diff })}</>}
+      {!partial && diff !== 0 && <> · {diff > 0 ? `+${diff}` : `−${-diff}`}</>}
     </span>
   )
 }

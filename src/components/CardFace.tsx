@@ -42,6 +42,9 @@ export const CardFace = memo(function CardFace({ card }: { card: Card }) {
   }
   const color = `var(--${card.suit})`
   const stars = constellation(card.id, card.value)
+  // Two-digit values sit further in, so their left edge lines up with single digits and keeps
+  // clear of the card's frame at full size.
+  const indexX = card.value >= 10 ? 21 : 15
   return (
     <svg viewBox="0 0 100 150" className="card-svg" role="img" aria-label={t('cards.number', { value: card.value, suit: t(`suits.${card.suit}`) })}>
       <rect x="1" y="1" width="98" height="148" rx="9" fill="url(#g-number)" stroke={color} strokeWidth="1.6" />
@@ -52,11 +55,11 @@ export const CardFace = memo(function CardFace({ card }: { card: Card }) {
         {stars.map(([x, y], i) => (
           <path key={i} d={SPARKLE} transform={`translate(${x} ${y}) scale(${i === 0 ? 0.42 : 0.3})`} />
         ))}
-        <text x="13" y="31" className="card-value" textAnchor="middle">{card.value}</text>
-        <g transform="translate(13 42) scale(0.62)"><SuitShape suit={card.suit} /></g>
+        <text x={indexX} y="31" className="card-value" textAnchor="middle">{card.value}</text>
+        <g transform="translate(15 42) scale(0.62)"><SuitShape suit={card.suit} /></g>
         <g transform="rotate(180 50 75)">
-          <text x="13" y="31" className="card-value" textAnchor="middle">{card.value}</text>
-          <g transform="translate(13 42) scale(0.62)"><SuitShape suit={card.suit} /></g>
+          <text x={indexX} y="31" className="card-value" textAnchor="middle">{card.value}</text>
+          <g transform="translate(15 42) scale(0.62)"><SuitShape suit={card.suit} /></g>
         </g>
       </g>
     </svg>
