@@ -10,7 +10,7 @@ export function SettingsButton({ className, iconOnly = false }: { className: str
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const s = useSettings()
-  const check = (key: 'sound' | 'vibrate' | 'confirmPlay') => (
+  const check = (key: 'sound' | 'vibrate' | 'confirmPlay' | 'statusLine') => (
     <label className={styles.row}>
       <span>
         {t(`settings.${key}`)}
@@ -47,6 +47,7 @@ export function SettingsButton({ className, iconOnly = false }: { className: str
           {check('sound')}
           {check('vibrate')}
           {check('confirmPlay')}
+          {check('statusLine')}
         </div>
       </Dialog>
     </>

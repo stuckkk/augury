@@ -8,11 +8,12 @@ describe('client settings', () => {
     expect(parseSettings('{"motion":"wild","sound":"yes"}')).toEqual(DEFAULT_SETTINGS)
   })
   it('keeps valid values', () => {
-    expect(parseSettings('{"motion":"off","sound":false,"vibrate":false,"confirmPlay":false}')).toEqual({
+    expect(parseSettings('{"motion":"off","sound":false,"vibrate":false,"confirmPlay":false,"statusLine":false}')).toEqual({
       motion: 'off',
       sound: false,
       vibrate: false,
       confirmPlay: false,
+      statusLine: false,
     })
   })
 })

@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Card } from '../engine/types'
 import { roomFromUrl, type Session } from '../network/useSession'
 import { CardFace } from './CardFace'
+import { Dialog } from './Dialog'
 import styles from './Entrance.module.css'
 import { LanguageToggle } from './LanguageToggle'
 import { Orrery } from './Orrery'
@@ -30,6 +31,21 @@ export function Entrance({ session }: { session: Session }) {
   const [name, setName] = useState(storedName)
   const [code, setCode] = useState(roomFromUrl)
   const invited = !!roomFromUrl()
+  // Arriving by invite link: ask for the name and join straight away.
+  const [inviteOpen, setInviteOpen] = useState(invited)
+  const [seenError, setSeenError] = useState(session.error)
+  const inviteName = useRef<HTMLInputElement>(null)
+
+  // A failed join (table gone, full or already playing) shows its toast; drop back to the entrance.
+  if (session.error !== seenError) {
+    setSeenError(session.error)
+    if (session.error) setInviteOpen(false)
+  }
+
+  useEffect(() => {
+    // After the dialog's showModal(), which would otherwise focus its close button.
+    if (inviteOpen) inviteName.current?.focus()
+  }, [inviteOpen])
 
   const remember = () => {
     try {
@@ -111,6 +127,25 @@ export function Entrance({ session }: { session: Session }) {
       </section>
 
       <footer className={styles.footer}>{t('entrance.footer')}</footer>
+
+      <Dialog open={inviteOpen && invited} title={t('entrance.inviteTitle', { code })} onClose={() => setInviteOpen(false)}>
+        <form className={styles.inviteForm} onSubmit={join}>
+          <label className={styles.field}>
+            <span>{t('entrance.yourName')}</span>
+            <input
+              ref={inviteName}
+              value={name}
+              maxLength={20}
+              autoComplete="nickname"
+              placeholder={t('entrance.namePlaceholder')}
+              onChange={e => setName(e.target.value)}
+            />
+          </label>
+          <button type="submit" className="btn btn-primary" disabled={!name.trim() || code.length < 5}>
+            {t('entrance.join')}
+          </button>
+        </form>
+      </Dialog>
     </div>
   )
 }

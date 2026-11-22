@@ -21,14 +21,17 @@ export interface SeatProps {
   revealSide: 'left' | 'right'
   /** Host may give this (disconnected) seat to a bot. */
   onReplace?: () => void
+  /** Shown just above the seat (the table status, on your own seat). */
+  note?: React.ReactNode
   style: React.CSSProperties
 }
 
-export function Seat({ info, player, color, me, dealer, acting, ready, compact, revealed, revealSide, onReplace, style }: SeatProps) {
+export function Seat({ info, player, color, me, dealer, acting, ready, compact, revealed, revealSide, onReplace, note, style }: SeatProps) {
   const { t } = useTranslation()
   const cls = [styles.seat, acting && styles.acting, me && styles.me, compact && styles.compact].filter(Boolean).join(' ')
   return (
     <div className={cls} style={{ ...style, '--seat': color } as React.CSSProperties}>
+      {note && <div className={styles.note}>{note}</div>}
       <div className={styles.plate}>
         <span className={styles.sigil}>
           <Sigil name={info.name} color={color} size={compact ? 28 : 36} isBot={info.isBot} />

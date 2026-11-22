@@ -13,6 +13,7 @@
     "createInstead": "or open a new table instead",
     "code": "Table code",
     "join": "Join",
+    "inviteTitle": "Join table {{code}}",
     "footer": "Invite friends with the table code or link. Bots fill empty seats."
   },
   "lobby": {
@@ -102,17 +103,13 @@
   },
   "status": {
     "choosingTrump": "{{name}} chooses trump…",
-    "bidding": "{{name}} prophesies…",
     "sealedBids": "Sealed prophecies: {{done}} of {{total}}",
-    "playing": "{{name}} to play.",
     "tookTrick": "{{name}} took the trick.",
-    "pressure": "Bids {{sum}} / tricks {{round}}",
-    "pressureHint": "All bids together, against the tricks in this round",
+    "pressure": "Bids {{sum}} / {{round}}",
+    "pressureHint": "All bids together, against the tricks in this round. +: more bids than tricks, −: fewer",
     "over": "over by {{n}}",
     "under": "under by {{n}}",
     "choosingTrumpYou": "You choose trump…",
-    "biddingYou": "Your prophecy…",
-    "playingYou": "Your turn.",
     "tookTrickYou": "You took the trick."
   },
   "seat": {
@@ -189,6 +186,8 @@
     "vibrate": "Vibrate",
     "vibrateDesc": "On phones, when it is your move",
     "confirmPlay": "Tap twice to play",
+    "statusLine": "Table status",
+    "statusLineDesc": "Above your seat: who took the trick, and all bids against the tricks",
     "confirmPlayDesc": "First tap raises a card, second tap plays it"
   },
   "errors": {

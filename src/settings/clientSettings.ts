@@ -9,10 +9,12 @@ export interface ClientSettings {
   vibrate: boolean
   /** Ask before playing a card (tap to raise, tap again to play). Off: a single tap plays. */
   confirmPlay: boolean
+  /** The small status pill above your seat (who took the trick, bids against tricks). */
+  statusLine: boolean
 }
 
 const STORAGE_KEY = 'augury-settings'
-export const DEFAULT_SETTINGS: ClientSettings = { motion: 'system', sound: true, vibrate: true, confirmPlay: true }
+export const DEFAULT_SETTINGS: ClientSettings = { motion: 'system', sound: true, vibrate: true, confirmPlay: true, statusLine: true }
 
 export function parseSettings(raw: string | null): ClientSettings {
   try {
@@ -22,6 +24,7 @@ export function parseSettings(raw: string | null): ClientSettings {
       sound: typeof s.sound === 'boolean' ? s.sound : DEFAULT_SETTINGS.sound,
       vibrate: typeof s.vibrate === 'boolean' ? s.vibrate : DEFAULT_SETTINGS.vibrate,
       confirmPlay: typeof s.confirmPlay === 'boolean' ? s.confirmPlay : DEFAULT_SETTINGS.confirmPlay,
+      statusLine: typeof s.statusLine === 'boolean' ? s.statusLine : DEFAULT_SETTINGS.statusLine,
     }
   } catch {
     return { ...DEFAULT_SETTINGS }

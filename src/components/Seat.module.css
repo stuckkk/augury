@@ -96,6 +96,15 @@
   font-size: 0.7rem;
 }
 
+/* Above the seat, centred on it; the content brings its own look. */
+.note {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+}
+
 .status {
   display: flex;
   gap: 4px;
